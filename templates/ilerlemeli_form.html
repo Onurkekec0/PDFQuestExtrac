@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sınav</title></head>
+<body>
+    <div class="container">
+        <h1>Sınav</h1>
+        <form method="post">
+            {% csrf_token %}
+            {% for soru in sorular %}
+                <div class="frame">
+                    <div class="question">
+                        {{ forloop.counter }}. Soru: {{ soru.soru }}
+                    </div>
+                    {{ form.soru }}
+                    {{ form.cevap }}
+                </div>
+            {% endfor %}
+            <button class="submit-button" type="submit">Sonraki Soru</button>
+        </form>
+    </div>
+</body>
+</html>

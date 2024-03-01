@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonuçlar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .result-container {
+            max-width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            color: #0074d9;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button-container a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color:lightblue;
+            transition: background-color 0.3s;
+        }
+
+        .button-container a:hover {
+            background-color: #0074d9;
+        }
+
+        .correct-answer {
+            color: #008000;
+            font-weight: bold;
+        }
+
+        .wrong-answer {
+            color: #FF0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <h1>Sonuçlar</h1>
+        <p>Doğru Sayısı: <span class="correct-answer">{{dogru}}</span></p>
+        <p>Yanlış Sayısı: <span class="wrong-answer">{{yanlis}}</span></p>
+
+        <!-- Ana sayfaya dönme butonu -->
+        <div class="button-container">
+            <a href="/">Ana Sayfaya Dön</a>
+        </div>
+    </div>
+</body>
+</html>

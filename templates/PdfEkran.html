@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            top: 0;
+            width: 100%;
+            height: 70px;
+            background-color: #333;
+            color: #fff;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 10px 10px 10px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #555;
+
+        }
+
+        .content {
+            text-align: center;
+            margin-top: 100px;
+        }
+    </style>
+    <title>PDF to Questions</title>
+</head>
+<body>
+<div class="navbar">
+    <a href="/">Anasayfa</a>
+    <a href="/ExamplesPDF">Örnekler</a>
+    <a href="/iletisim">İletişim</a>
+</div>
+
+<div class="content">
+    <h1>Soruları çıkarmak istediğiniz PDF dosyasını buraya yükleyiniz</h1>
+    <br>
+    <h2>Dosya Yükleme Formu</h2>
+    <br>
+    <form
+      action="/sorular"
+      method="post"
+      enctype="multipart/form-data"
+    >
+            {% csrf_token %}
+
+      <label for="file-upload" class="file-upload" style="padding: 10px; background-color: #f5f5f5; border: 1px solid #e8e8e8; border-radius: 5px; cursor: pointer; color: #333; font-size: 16px;">
+        Dosya Seç
+      </label>
+        <br>
+      <input type="file" id="file-upload" name="dosya" style="display: none;" />
+      <br /><br />
+      <input
+        type="submit"
+        value="Yükle"
+        style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;"
+      />
+    </form>
+</div>
+
+</body>
+</html>

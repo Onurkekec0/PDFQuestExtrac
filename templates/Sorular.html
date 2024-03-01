@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sınav</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            margin-top: 10px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .frame {
+            border: 2px solid #0074d9;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .radio-input {
+            display: none;
+        }
+        .custom-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #0074d9;
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .custom-radio.selected {
+            background-color: #0074d9;
+        }
+        .custom-radio.selected::before {
+            content: '\2713';
+            color: #fff;
+        }
+        .submit-button {
+            background-color: #0074d9;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .timer {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 16px;
+            color: #0074d9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+<span class="timer" id="timer" data-duration="{{time}}">Süre: {{time}}:00</span>
+        <h1>Sınav</h1>
+<form action="{% url 'cevaplar' %}" method="post" id="myForm">
+    {% csrf_token %}
+
+    {% for question in questions %}
+        <div class="frame">
+            <div class="question">
+                {{ question.0}}
+            </div>
+            <ul class="options">
+                {% for option in question %}
+                    {% if forloop.counter != 1 %} {# forloop.counter 1'den başlar #}
+                        <li onclick="selectRadio(this)">
+                            <label class="custom-radio">
+                                <input type="radio" class="radio-input" name="{{ question }}" value="{{ option }}">
+                            </label>
+                            {{ option }}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+    {% csrf_token %}
+
+    <button class="submit-button" type="button" onclick="submitForm()">Sınavı Gönder</button>
+        <label id="cevaplar" style="visibility: hidden;width:1px;height:1px;">{{ cevaplar }}</label>
+
+    {% csrf_token %}
+</form>
+    </div>
+<script>
+
+    function selectRadio(selectedOption) {
+        const selectedFrame = selectedOption.closest('.frame');
+        const radios = selectedFrame.querySelectorAll('.custom-radio');
+        radios.forEach(radio => {
+            radio.classList.remove('selected');
+            const radioInput = radio.querySelector('.radio-input');
+            radioInput.checked = false;
+        });
+        const selectedRadio = selectedOption.querySelector('.custom-radio');
+        const radioInput = selectedOption.querySelector('.radio-input');
+        selectedRadio.classList.add('selected');
+        radioInput.checked = true;
+    }
+
+    const timer = document.getElementById('timer');
+    let seconds = timer.dataset.duration*60;
+
+    function updateTimer() {
+        seconds--;
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        timer.textContent = `Süre: ${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+     if (seconds === 0) {
+        clearInterval(timerInterval);
+        document.querySelector('form').submit();
+    }
+    }
+function submitForm() {
+    var selectedOptions = [];
+    var selectedRadios = document.querySelectorAll('.custom-radio.selected input[type="radio"]');
+    selectedRadios.forEach(function (radio) {
+        selectedOptions.push({
+            question: radio.name,
+            value: radio.value
+        });
+    });
+
+    var form = document.getElementById('myForm');
+
+    var csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = 'csrfmiddlewaretoken';
+    csrfInput.value = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    form.appendChild(csrfInput);
+
+    var cevaplarInput = document.createElement('input');
+    cevaplarInput.type = 'hidden';
+    cevaplarInput.name = 'cevaplar';
+    cevaplarInput.value = JSON.stringify(selectedOptions);
+    form.appendChild(cevaplarInput);
+
+    // Formu gönderin
+    form.submit();
+}
+    const timerInterval = setInterval(updateTimer, 1000);
+</script></body>
+</html>
